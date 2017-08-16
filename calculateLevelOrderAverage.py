@@ -41,7 +41,6 @@ class BST:
         
         level_to_be_averaged.append(self)
 
-
         while(level_to_be_averaged):
             run_sum = 0
             n = 0
@@ -69,7 +68,7 @@ class BST:
         return row_avg
                 
     
-def main():            
+def main():     
     myTree = BST(7)            
     myTree.insert(10)
     myTree.insert(5)
