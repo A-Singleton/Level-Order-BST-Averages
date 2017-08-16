@@ -35,33 +35,33 @@ class BST:
             
         
     def rowAvgCalculator(self):
-        q1=[]
-        q2=[]
+        level_to_be_averaged = []
+        child_nodes = []
         row_avg = []
-        run_sum = 0
-        n = 0
         
-        q1.append(self)
+        level_to_be_averaged.append(self)
 
-        while(len(q1) != 0 or len(q2) != 0):
-            while(len(q1) != 0):
+
+        while(level_to_be_averaged):
+            run_sum = 0
+            n = 0
+           
+            while(level_to_be_averaged):
                 
-                node = q1.pop()
+                node = level_to_be_averaged.pop()
                 run_sum += node.data
                 n += 1
                 
                 if node.left:
-                    q2.insert(0, node.left)
+                    child_nodes.insert(0, node.left)
                     
                 if node.right:
-                    q2.insert(0, node.right)
+                    child_nodes.insert(0, node.right)
             
-            row_avg.append(run_sum/n)
-            run_sum = 0
-            n = 0
+            row_avg.append(float(run_sum/n))
             
-            q1 = q2
-            q2 = []
+            level_to_be_averaged = child_nodes
+            child_nodes = []
         
         for level in row_avg:
             print(level)
@@ -76,12 +76,12 @@ def main():
     myTree.insert(11)
     myTree.insert(6)
     myTree.insert(4)
-    myTree.insert(9)
+    myTree.insert(8.7)
     myTree.insert(3)
     
     myTree.preOrderTraversal()
     
-    avg_List = myTree.rowAvgCalculator()
+    myTree.rowAvgCalculator()
 
 if __name__ == '__main__':
     main()
