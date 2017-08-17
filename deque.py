@@ -7,32 +7,26 @@ Exercise 1: Implement a deque (short for double-ended queue):
 
 class Deque(object):
 
-	def __init__(self):
-		"""
-		Initializes a deque with no elements
-		"""
+    def __init__(self):
+        self.deque = []
 
-	def insert_front(self, value):
-		"""
-		Inserts 'value' at the front of the deque
-		"""
+    def insert_front(self, value):
+        self.deque.append(value)
 
-	def insert_back(self, value):
-		"""
-		Inserts 'value' at the back of the deque
-		"""
+    def insert_back(self, value):
+        self.deque.insert(0,value)
 
-	def pop_front(self):
-		"""
-		Returns the value at the front of the deque, and removes it.
-		Returns None if the deque is empty.
-		"""
+    def pop_front(self):
+        if self.deque:
+            return self.deque.pop()
+        else:
+            return None
 
-	def pop_back(self):
-		"""
-		Returns the value at the back of the deque, and removes it.
-		Returns Non if the deque is empty.
-		"""
+    def pop_back(self):
+        if self.deque:
+            return self.deque.pop(0)
+        else:
+            return None
 
 """
 Exercise 2: I found this one at http://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/
@@ -47,8 +41,33 @@ Output :
 Try to solve this one with your Deque class above.  Feel free to add new methods to it if you'd like. 
 """
 
-def max_of_subarrays(arr):
-	pass
+def max_of_subarrays(arr, k):
+           
+    if(k > len(arr) or k < 1):
+        return None
+    
+    if arr is None:
+        return None
+
+    deque = Deque()    
+    for i in range(0, k):
+        deque.insert_front(arr[i])
+        
+    right_arr_index = k - 1
+    while(right_arr_index < len(arr)):
+
+        max_val = -1*float("inf")
+        for val in deque.deque:
+            if val > max_val:
+                max_val = val
+                
+        right_arr_index += 1
+        if (right_arr_index is not len(arr)):
+            deque.pop_back()
+            deque.insert_front(arr[right_arr_index])           
+        
+        print(max_val)
+
 
 """
 Exercise 3: I found this one at http://www.geeksforgeeks.org/sum-minimum-maximum-elements-subarrays-size-k/
@@ -69,7 +88,58 @@ Explanation : Subarrays of size 4 are :
                           = 18
 """
 
-def sum_of_min_and_max_of_all_contiguous_subarrays(arr):
-	pass
+def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
+    
+    # Prevent improper inputs
+    if k > len(arr) or k < 1:
+        return None
+    
+    if arr is None:
+        return None
+    
+    deque = Deque()   
+    for i in range(0, k):
+        deque.insert_front(arr[i])
+        
+    right_arr_index = k-1
+    result_list = []
+    run_sum = 0
+    
+    while(right_arr_index < len(arr)):
+        
+        max_value = -1*float('inf')
+        for item in deque.deque:
+            if item > max_value:
+                max_value = item
+        
+        min_value = float('inf')
+        for item in deque.deque:
+            if item < min_value:
+                min_value = item
+        
+        right_arr_index += 1
+        if (right_arr_index is not len(arr)):
+            deque.pop_back()
+            deque.insert_front(arr[right_arr_index])
+        
+        result_list.append(max_value + min_value)
+        run_sum += (max_value + min_value)
 
+    print(run_sum)
+                
+    
+
+def main():
+    arr_1 = [1, 2, 3, 1, 4, 5, 2, 3, 6]
+    arr_2 = [2, 5, -1, 7, -3, -1, -2]
+    
+    k_1 = 3
+    k_2 = 4
+	
+    max_of_subarrays(arr_1, k_1)
+    sum_of_min_and_max_of_all_contiguous_subarrays(arr_2, k_2)
+    
+if __name__ == '__main__':
+    main()
+    
 
