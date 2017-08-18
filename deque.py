@@ -27,6 +27,13 @@ class Deque(object):
             return self.deque.pop(0)
         else:
             return None
+        
+    def size(self):
+        return len(self.deque)
+        
+    def peek_back(self):
+        return self.deque[0]
+        
 
 """
 Exercise 2: I found this one at http://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/
@@ -41,6 +48,8 @@ Output :
 Try to solve this one with your Deque class above.  Feel free to add new methods to it if you'd like. 
 """
 
+#Brute force solution
+#
 def max_of_subarrays(arr, k):
            
     if(k > len(arr) or k < 1):
@@ -68,6 +77,47 @@ def max_of_subarrays(arr, k):
         
         print(max_val)
 
+#Optimized Solution
+#
+def max_of_subarrays_n_time(arr, k):
+    
+    if(k > len(arr) or k < 1):
+        return None
+    
+    if arr is None:
+        return None
+    
+    deque_of_indecies = Deque()
+    max_of_subarrays = []
+    
+    # Fill deque from first subarray
+    for i in range(0, k):
+        while(deque_of_indecies.size() > 0 and arr[deque_of_indecies.deque[-1]]
+        <= arr[i]):
+            
+            deque_of_indecies.pop_front()
+        deque_of_indecies.insert_front(i)
+    
+    print(arr[deque_of_indecies.peek_back()])
+    max_of_subarrays.append(arr[deque_of_indecies.peek_back()])
+    
+    # Perform alg on remaining array
+    for i in range(k, len(arr)):
+        
+        #shift over one and remove if subarray has moved past the index
+        if ( deque_of_indecies.deque[0] <= i-k ):
+            deque_of_indecies.pop_back()
+           
+        while(deque_of_indecies.size() > 0 and arr[deque_of_indecies.deque[-1]]
+        <= arr[i]):
+            
+            deque_of_indecies.pop_front()
+        deque_of_indecies.insert_front(i)
+            
+        print(arr[deque_of_indecies.peek_back()])
+        max_of_subarrays.append(arr[deque_of_indecies.peek_back()])    
+        
+    return max_of_subarrays
 
 """
 Exercise 3: I found this one at http://www.geeksforgeeks.org/sum-minimum-maximum-elements-subarrays-size-k/
@@ -87,7 +137,8 @@ Explanation : Subarrays of size 4 are :
      Sum of all min & max = 6 + 4 + 4 + 4 
                           = 18
 """
-
+# Brute Force Solution
+# 
 def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
     
     # Prevent improper inputs
@@ -128,6 +179,48 @@ def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
     print(run_sum)
                 
     
+# Optimized Solution
+#
+def sum_of_min_and_max_of_all_contiguous_subarrays_n_time(arr, k):
+    
+    if(k > len(arr) or k < 1):
+        return None
+    
+    if arr is None:
+        return None
+    
+    min_deque = Deque()
+    max_of_subarrays = max_of_subarrays_n_time(arr, k)
+    min_of_subarrays = []
+      
+    for i in range(0, k):
+        while(min_deque.size() > 0 and arr[ min_deque.deque[-1]]
+        >= arr[i]):
+            
+             min_deque.pop_front()
+        min_deque.insert_front(i)
+    
+    print(arr[min_deque.peek_back()])
+    min_of_subarrays.append(arr[min_deque.peek_back()])
+    
+    # Perform alg on remaining array
+    for i in range(k, len(arr)):
+        
+        #shift over one and remove if subarray has moved past the index
+        if (  min_deque.deque[0] <= i-k ):
+             min_deque.pop_back()
+           
+        while( min_deque.size() > 0 and arr[ min_deque.deque[-1]]
+        >= arr[i]):
+             min_deque.pop_front()
+        min_deque.insert_front(i)
+            
+        print(arr[min_deque.peek_back()])
+        min_of_subarrays.append(arr[min_deque.peek_back()])
+        
+    print(sum(max_of_subarrays) + sum(min_of_subarrays))
+    return (sum(max_of_subarrays) + sum(min_of_subarrays))
+
 
 def main():
     arr_1 = [1, 2, 3, 1, 4, 5, 2, 3, 6]
@@ -138,6 +231,9 @@ def main():
 	
     max_of_subarrays(arr_1, k_1)
     sum_of_min_and_max_of_all_contiguous_subarrays(arr_2, k_2)
+    
+    max_of_subarrays_n_time(arr_1, k_1)
+    sum_of_min_and_max_of_all_contiguous_subarrays_n_time(arr_2, k_2)
     
 if __name__ == '__main__':
     main()
