@@ -33,6 +33,9 @@ class Deque(object):
         
     def peek_back(self):
         return self.deque[0]
+
+    def max(self):
+    	return max(self.deque)
         
 
 """
@@ -59,13 +62,29 @@ def max_of_subarrays(arr, k):
         return None
 
     deque = Deque()    
-    for i in range(0, k):
+    for i in range(0, k): # you can just use range(k)
         deque.insert_front(arr[i])
         
     right_arr_index = k - 1
+
+    """
+	Something that's nice for loops in which you need to know the index is Python's enumerate builtin. See
+	https://docs.python.org/2.3/whatsnew/section-enumerate.html
+
+	You then could've said something along the lines of:
+	for ind, val in arr[k-1:]:
+		...
+    """
     while(right_arr_index < len(arr)):
 
-        max_val = -1*float("inf")
+    	"""
+		This would've been a nice spot to add a "max" method to Deque.  I went ahead and added it, using Python's
+		"max" built-in.
+
+		It's worth familiarizing yourself with Python 2's built-ins for situations like these.  See
+		https://docs.python.org/2/library/functions.html
+    	"""
+        max_val = -1*float("inf")  
         for val in deque.deque:
             if val > max_val:
                 max_val = val
@@ -76,6 +95,7 @@ def max_of_subarrays(arr, k):
             deque.insert_front(arr[right_arr_index])           
         
         print(max_val)
+
 
 #Optimized Solution
 #
@@ -91,8 +111,17 @@ def max_of_subarrays_n_time(arr, k):
     max_of_subarrays = []
     
     # Fill deque from first subarray
-    for i in range(0, k):
-        while(deque_of_indecies.size() > 0 and arr[deque_of_indecies.deque[-1]]
+    for i in range(0, k):  # Just say range(k)
+    	"""
+		You should never access internals of a class, as in deque_of_indecies.deque.  In fact, it's customary
+		to prefix fields with a "_" to make that obvious, as in deque_of_indecies._deque.  You should implement
+		a method on the class to do the thing that you want, which you seem to have done in peek_back.
+
+		The reason that it's bad to access class internals is that the writers of the class should be able to
+		change the internal implementation without affecting dependers.  Maintainers of a class are only
+		responsible for its API, that is; its public methods.
+    	"""
+        while(deque_of_indecies.size() > 0 and arr[deque_of_indecies.deque[-1]] 
         <= arr[i]):
             
             deque_of_indecies.pop_front()
