@@ -22,6 +22,7 @@ class Deque(object):
         else:
             return None
 
+
     def pop_back(self):
         if self.deque:
             return self.deque.pop(0)
@@ -172,23 +173,25 @@ def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
     
     # Prevent improper inputs
     if k > len(arr) or k < 1:
-        return None
+        return None  # Throw an exception on malformed input.
+        # raise Exception("lenght of subarrays must be greater than zero and smaller than the length of the array")
     
     if arr is None:
         return None
     
-    deque = Deque()   
+    deque = Deque() # seems like you could just use a plain list here
     for i in range(0, k):
         deque.insert_front(arr[i])
         
     right_arr_index = k-1
     result_list = []
-    run_sum = 0
+    run_sum = 0  # <- good variable naming here, and throughout this solution.
     
-    while(right_arr_index < len(arr)):
+    while(right_arr_index < len(arr)): # Use a 'for' loop with enumerate here.
         
+        # Use built-in min and max functions: https://docs.python.org/2/library/functions.html
         max_value = -1*float('inf')
-        for item in deque.deque:
+        for item in deque.deque:  # don't access class internals - implement __iter__, see http://anandology.com/python-practice-book/iterators.html
             if item > max_value:
                 max_value = item
         
@@ -211,7 +214,14 @@ def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
 # Optimized Solution
 #
 def sum_of_min_and_max_of_all_contiguous_subarrays_n_time(arr, k):
-    
+    """ 
+    I don't really understand what's going on here - could you give me a brief
+    explination of your approach here? I think it's best if you generally
+    write some comments to describe your approach when we're working together
+    over GitHub.
+    """
+
+
     if(k > len(arr) or k < 1):
         return None
     
@@ -219,7 +229,7 @@ def sum_of_min_and_max_of_all_contiguous_subarrays_n_time(arr, k):
         return None
     
     min_deque = Deque()
-    max_of_subarrays = max_of_subarrays_n_time(arr, k)
+    max_of_subarrays = max_of_subarrays_n_time(arr, k) # cool :)
     min_of_subarrays = []
       
     for i in range(0, k):
