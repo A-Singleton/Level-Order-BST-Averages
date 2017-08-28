@@ -22,6 +22,7 @@ class Deque(object):
         else:
             return None
 
+
     def pop_back(self):
         if self.deque:
             return self.deque.pop(0)
@@ -33,6 +34,9 @@ class Deque(object):
         
     def peek_back(self):
         return self.deque[0]
+
+    def max(self):
+    	return max(self.deque)
         
 
 """
@@ -59,13 +63,29 @@ def max_of_subarrays(arr, k):
         return None
 
     deque = Deque()    
-    for i in range(0, k):
+    for i in range(0, k): # you can just use range(k)
         deque.insert_front(arr[i])
         
     right_arr_index = k - 1
+
+    """
+	Something that's nice for loops in which you need to know the index is Python's enumerate builtin. See
+	https://docs.python.org/2.3/whatsnew/section-enumerate.html
+
+	You then could've said something along the lines of:
+	for ind, val in arr[k-1:]:
+		...
+    """
     while(right_arr_index < len(arr)):
 
-        max_val = -1*float("inf")
+    	"""
+		This would've been a nice spot to add a "max" method to Deque.  I went ahead and added it, using Python's
+		"max" built-in.
+
+		It's worth familiarizing yourself with Python 2's built-ins for situations like these.  See
+		https://docs.python.org/2/library/functions.html
+    	"""
+        max_val = -1*float("inf")  
         for val in deque.deque:
             if val > max_val:
                 max_val = val
@@ -76,6 +96,7 @@ def max_of_subarrays(arr, k):
             deque.insert_front(arr[right_arr_index])           
         
         print(max_val)
+
 
 #Optimized Solution
 #
@@ -91,8 +112,17 @@ def max_of_subarrays_n_time(arr, k):
     max_of_subarrays = []
     
     # Fill deque from first subarray
-    for i in range(0, k):
-        while(deque_of_indecies.size() > 0 and arr[deque_of_indecies.deque[-1]]
+    for i in range(0, k):  # Just say range(k)
+    	"""
+		You should never access internals of a class, as in deque_of_indecies.deque.  In fact, it's customary
+		to prefix fields with a "_" to make that obvious, as in deque_of_indecies._deque.  You should implement
+		a method on the class to do the thing that you want, which you seem to have done in peek_back.
+
+		The reason that it's bad to access class internals is that the writers of the class should be able to
+		change the internal implementation without affecting dependers.  Maintainers of a class are only
+		responsible for its API, that is; its public methods.
+    	"""
+        while(deque_of_indecies.size() > 0 and arr[deque_of_indecies.deque[-1]] 
         <= arr[i]):
             
             deque_of_indecies.pop_front()
@@ -143,23 +173,25 @@ def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
     
     # Prevent improper inputs
     if k > len(arr) or k < 1:
-        return None
+        return None  # Throw an exception on malformed input.
+        # raise Exception("lenght of subarrays must be greater than zero and smaller than the length of the array")
     
     if arr is None:
         return None
     
-    deque = Deque()   
+    deque = Deque() # seems like you could just use a plain list here
     for i in range(0, k):
         deque.insert_front(arr[i])
         
     right_arr_index = k-1
     result_list = []
-    run_sum = 0
+    run_sum = 0  # <- good variable naming here, and throughout this solution.
     
-    while(right_arr_index < len(arr)):
+    while(right_arr_index < len(arr)): # Use a 'for' loop with enumerate here.
         
+        # Use built-in min and max functions: https://docs.python.org/2/library/functions.html
         max_value = -1*float('inf')
-        for item in deque.deque:
+        for item in deque.deque:  # don't access class internals - implement __iter__, see http://anandology.com/python-practice-book/iterators.html
             if item > max_value:
                 max_value = item
         
@@ -182,7 +214,14 @@ def sum_of_min_and_max_of_all_contiguous_subarrays(arr, k):
 # Optimized Solution
 #
 def sum_of_min_and_max_of_all_contiguous_subarrays_n_time(arr, k):
-    
+    """ 
+    I don't really understand what's going on here - could you give me a brief
+    explination of your approach here? I think it's best if you generally
+    write some comments to describe your approach when we're working together
+    over GitHub.
+    """
+
+
     if(k > len(arr) or k < 1):
         return None
     
@@ -190,7 +229,7 @@ def sum_of_min_and_max_of_all_contiguous_subarrays_n_time(arr, k):
         return None
     
     min_deque = Deque()
-    max_of_subarrays = max_of_subarrays_n_time(arr, k)
+    max_of_subarrays = max_of_subarrays_n_time(arr, k) # cool :)
     min_of_subarrays = []
       
     for i in range(0, k):
