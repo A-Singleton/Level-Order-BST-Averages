@@ -2,7 +2,7 @@
 """
 Created on Tue Aug 22 17:01:00 2017
 
-@author: Duwan_000
+@author: A-Singleton
 """
 
 class minHeap:
@@ -67,5 +67,3 @@ def main():
             
 if __name__ == '__main__':
     main()
-
-        

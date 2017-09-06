@@ -19,6 +19,7 @@ class Deque(object):
         else:
             return None
 
+
     def pop_back(self):
         if self.deque:
             return self.deque.pop(0)
@@ -39,7 +40,7 @@ class Deque(object):
     
     def min(self):
         return min(self.deque)
-     
+    
 
 """
 Exercise 2: I found this one at http://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/
@@ -68,6 +69,7 @@ def max_of_subarrays(arr, k):
 
     # Could optionally initialize a given list as the intital deque.
     deque = Deque()    
+
     for i in range(k): 
         deque.insert_front(arr[i])
     
@@ -78,9 +80,7 @@ def max_of_subarrays(arr, k):
         deque.insert_front(val) 
         
         max_sub_array = deque.max()       
-        
-#        print('max_sub_array')
-#        print(max_sub_array)
+
         max_list.append(max_sub_array)
         
     for x in max_list:    
